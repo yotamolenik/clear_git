@@ -50,5 +50,21 @@ def delete_branches(branch_to_keep, confirm):
             f'about to delete {other_branches}, not actually deleting anything. pass in --confirm=True to actually delete')
 
 
+@cli.command()
+def delete_commits():
+    """ squash all commits together and push """
+    glog = git('log')
+    glog = glog.split()
+    commits = []
+    for index, s in enumerate(glog):
+        if 'commit' in s:
+            # avoid an edge case where 'commit' is the last word in the list
+            if index < len(glog) - 1:
+                commits.append(glog[index + 1])
+    git('reset', '--soft', commits[-1])
+    git('commit', '-am', 'create exercise')
+    git('push', '--force-with-lease')
+
+
 if __name__ == '__main__':
     cli()
