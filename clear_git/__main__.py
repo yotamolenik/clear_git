@@ -42,6 +42,9 @@ def delete_branches(branch_to_keep, confirm):
                 elif 'refusing to delete the current branch' in e.stderr:
                     print(
                         f'github refuses to delete branch {branch}. maybe you tried to delete a protected/default branch?')
+                elif f'''Cannot delete branch '{branch}' checked out''' in e.stderr:
+                    print('you cant delete your current branch')
+
                 else:
                     raise
 
